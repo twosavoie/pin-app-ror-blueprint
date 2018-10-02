@@ -6,16 +6,16 @@
 <div class="pins">
   <% @pins.each_slice(3) do |row| %>
     <div class="row">
-      <% row.each do |pin| %>      
+      <% row.each do |pin| %>
         <div class="pin-container col-md-4">
           <div class="pin">
             <div class="pin-header">
               <h4>
-                <a href="<%= pin_path(pin) %>">
+                <a href="<%= pin_path(pin) %>" target="_blank">
                   <%= "#{pin.title}" %>
                 </a>
               </h4>
-              <a class="url" href="<%= "#{pin.url}" %>">
+              <a class="url" href="<%= "#{pin.url}" %>" target="_blank">
                 <%= "#{pin.url}" %>
               </a>
             </div>
