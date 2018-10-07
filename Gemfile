@@ -33,6 +33,7 @@ gem 'puma'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+  gem 'rspec-rails', '~> 2.99.0'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
@@ -45,4 +46,4 @@ group :development, :test do
 end
 
 gem 'rspec', '~> 2.99.0'
-gem 'rspec-rails', '~> 2.99.0'
+#gem 'rspec-rails', '~> 2.99.0'

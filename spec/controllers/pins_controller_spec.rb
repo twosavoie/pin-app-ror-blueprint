@@ -16,6 +16,15 @@ RSpec.describe PinsController do
       # keyword expect > what actually happened vs what you expected what happened to either match or not match
       expect(response).to render_template("index")
     end
+
+    it 'populates @pins with all pins' do
+      get :index
+      # expect the @pins variable to equal all the pins in the database
+      # Rspec lets us access the value of @pins intance variable using assigns[:pins]
+      expect(assigns[:pins]).to eq(Pin.all)
+
+    end
+
   end
 
 end
