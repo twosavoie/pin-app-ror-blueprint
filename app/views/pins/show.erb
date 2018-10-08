@@ -11,9 +11,10 @@
   <hr/>
   <p>
     <b>Visit <%= "#{@pin.title}" %> at: </b>
-    <a class="url" href="<%= "#{@pin.url}" %>" target="_blank">
+    <%= link_to "#{@pin.url}", "#{@pin.url}", html_options = {target: "_blank", class: "url"} %>
+<!--<a class="url" href="<%= "#{@pin.url}" %>" target="_blank">
       <%= "#{@pin.url}" %>
-    </a>
+    </a> -->
   </p>
 </div>
 <br/>
