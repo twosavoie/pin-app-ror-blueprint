@@ -31,6 +31,14 @@ class PinsController < ApplicationController
       end
   end
 
+  def edit
+#    @pin = Pin.find(pin_params)
+#    erb :'/pins/:id/edit'
+  end
+
+  def update
+  end
+
   private
 
   def pin_params
