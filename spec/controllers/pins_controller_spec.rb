@@ -20,7 +20,7 @@ RSpec.describe PinsController do
     it 'populates @pins with all pins' do
       get :index
       # expect the @pins variable to equal all the pins in the database
-      # Rspec lets us access the value of @pins intance variable using assigns[:pins]
+      # Rspec lets us access the value of @pins instance variable using assigns[:pins]
       expect(assigns[:pins]).to eq(Pin.all)
 
     end
@@ -52,6 +52,7 @@ RSpec.describe PinsController do
         slug: "rails-wizard",
         text: "A fun and helpful Rails Resource",
         resource_type: "rails"}
+       #should I change this so tests pass? pins_controller.rb 54 & pin.rb 2
     end
 
     after(:each) do
@@ -95,5 +96,57 @@ RSpec.describe PinsController do
     end
 
   end
+
+  describe "GET edit" do
+    # create a pin and use the id of that pin in your call
+    before(:each) do
+      @pin = Pin.first
+      get :edit, :id => 1 # pin: @pin_hash # params: {id: @pin.id}
+    end
+
+    # get to pins/id/edit
+    it 'responds with success' do
+      get :edit, :id => 1 # @pin.id #, pin: @pin_hash
+      expect(response.success?).to be(true)
+    end
+
+    it 'renders the edit temlate' do
+      get :edit, :id => 1
+      expect(response).to render_template(:edit)
+    end
+
+    # assigns an instance variable called @pin to the Pin with the appropriate id
+    it 'assigns an instance variable called @pin to the Pin with the appropriate id' do
+      get :edit, :id => 1
+      expect(assigns(:pin)).to eq(Pin.first)
+    end
+  end
+
+  describe "PUT update" do
+    before(:each) do
+      @pin = Pin.first
+      get :edit, :id => 1 # pin: @pin_hash # params: {id: @pin.id}
+    end
+    # make a POST request to /pins with valid parameters
+      # responds with success
+      it 'responds with success' do
+        get :edit, :id => 1 # @pin.id #, pin: @pin_hash
+        expect(response.success?).to be(true)
+      end
+      # updates a pin
+      # redirects to the show view
+#      it 'redirects to the show view' do
+#        post :create, :id => 1
+#        expect(response).to redirect_to(pin_url(assigns(:pin)))
+#      end
+    # make a POST request to /pins with invalid parameters
+      # assigns an @errors instance variable
+
+      it 'renders the new view' do
+        get :edit, :id => 1
+        expect(response).to render_template(:edit, :id => 1)
+      end
+  end
+
 
 end
