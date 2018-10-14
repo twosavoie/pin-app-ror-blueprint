@@ -97,56 +97,50 @@ RSpec.describe PinsController do
 
   end
 
-  describe "GET edit" do
-    # create a pin and use the id of that pin in your call
+  describe "GET edit" do #!!! # get to pins/id/redirect_to
     before(:each) do
-      @pin = Pin.first
-      get :edit, :id => 1 # pin: @pin_hash # params: {id: @pin.id}
+      @pin = Pin.create(title: "Rails Wizard",
+      url: "http://railswizard.org",
+      slug: "rails-wizard",
+      text: "A fun and helpful Rails Resource",
+      resource_type: "rails")
     end
 
-    # get to pins/id/edit
+    after(:each) do
+      pin = Pin.find_by_slug("rails-wizard")
+      if pin.present?
+        pin.delete
+      end
+    end
+
     it 'responds with success' do
-      get :edit, :id => 1 # @pin.id #, pin: @pin_hash
+      get :edit, id: @pin.id
       expect(response.success?).to be(true)
     end
 
-    it 'renders the edit temlate' do
-      get :edit, :id => 1
+    it 'renders the edit template' do
+      get :edit, id: @pin.id
       expect(response).to render_template(:edit)
     end
 
     # assigns an instance variable called @pin to the Pin with the appropriate id
-    it 'assigns an instance variable called @pin to the Pin with the appropriate id' do
-      get :edit, :id => 1
-      expect(assigns(:pin)).to eq(Pin.first)
+    it 'assigns an instance variable to a new pin' do
+      get :edit, id: @pin.id
+      expect(assigns(:pin)).to eq(@pin)
     end
   end
 
-  describe "PUT update" do
-    before(:each) do
-      @pin = Pin.first
-      get :edit, :id => 1 # pin: @pin_hash # params: {id: @pin.id}
-    end
+  describe "PUT update" do # why not patch?
     # make a POST request to /pins with valid parameters
       # responds with success
-      it 'responds with success' do
-        get :edit, :id => 1 # @pin.id #, pin: @pin_hash
-        expect(response.success?).to be(true)
-      end
       # updates a pin
       # redirects to the show view
-#      it 'redirects to the show view' do
-#        post :create, :id => 1
-#        expect(response).to redirect_to(pin_url(assigns(:pin)))
-#      end
+
     # make a POST request to /pins with invalid parameters
       # assigns an @errors instance variable
+      # renders the edit view
 
-      it 'renders the new view' do
-        get :edit, :id => 1
-        expect(response).to render_template(:edit, :id => 1)
-      end
+    # the create action tests are similar - use as guide
   end
-
 
 end
