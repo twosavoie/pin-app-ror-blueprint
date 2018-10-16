@@ -13,7 +13,7 @@ RSpec.describe PinsController do
       #my expectation of what will happen when RSpec runs the action
       #this is the core of the RSpec testing framework
       #can expect .to matcher or .not_to matcher
-      # keyword expect > what actually happened vs what you expected what happened to either match or not match
+      # keyword expect > what actually happened (response = "it" = "get :index") vs what you expected to happen to either match or not match
       expect(response).to render_template("index")
     end
 
@@ -97,7 +97,7 @@ RSpec.describe PinsController do
 
   end
 
-  describe "GET edit" do #!!! # get to pins/id/redirect_to
+  describe "GET edit" do  # get to pins/id/redirect_to
     before(:each) do
       @pin = Pin.create(title: "Rails Wizard",
       url: "http://railswizard.org",
@@ -130,17 +130,69 @@ RSpec.describe PinsController do
     end
   end
 
+#!!!
   describe "PUT update" do # why not patch?
+    # the create action tests are similar - use as guide
+    before(:each) do
+      @pin = Pin.create(title: "Rails Wizard",
+      url: "http://railswizard.org",
+      slug: "rails-wizard",
+      text: "A fun and helpful Rails Resource",
+      resource_type: "rails")
+      @pin_hash = {
+        title: "Rails Wizard",
+        url: "http://railswizard.org",
+        slug: "rails-wizard",
+        text: "A fun and helpful Rails Resource",
+        resource_type: "rails"}
+       #should I change this so tests pass? pins_controller.rb 54 & pin.rb 2
+    end
+
+    after(:each) do
+      pin = Pin.find_by_slug("rails-wizard")
+      if !pin.nil?
+        pin.destroy
+      end
+    end
+
     # make a POST request to /pins with valid parameters
       # responds with success
-      # updates a pin
-      # redirects to the show view
+      it 'responds with success' do
+        patch :update, id: @pin.id, pin: @pin_hash
+        expect(response).to redirect_to("/pins/#{@pin.id}")
+      end
 
+      it 'updates a pin' do
+        new_title = "Skillcrush"
+        put :update, id: @pin.id, pin: @pin_hash
+        expect(@pin.reload.title).not_to eq(new_title)
+      end
+
+      it 'redirects to the show view' do
+        put :update, id: @pin.id, pin: @pin_hash
+        expect(response).to redirect_to(pin_url(assigns(:pin)))
+      end
+
+#start here
     # make a POST request to /pins with invalid parameters
       # assigns an @errors instance variable
+      it 'assigns the @errors instance variable on error' do
+              # The title is required in the Pin model, so we'll
+              # delete the title from the @pin_hash in order
+              # to test what happens with invalid parameters
+        @pin_hash.delete(:title)
+        post :create, pin: @pin_hash
+        expect(assigns[:errors].present?).to be(true)
+      end
+
       # renders the edit view
-
-    # the create action tests are similar - use as guide
+      it 'redisplays edit form on error' do
+        # The title is required in the Pin model, so we'll
+        # delete the title from the @pin_hash in order
+        # to test what happens with invalid parameters
+        @pin_hash.delete(:title)
+        post :edit, id: @pin.id 
+        expect(response).to render_template(:edit)
+      end
+    end
   end
-
-end
