@@ -51,7 +51,8 @@ RSpec.describe PinsController do
         url: "http://railswizard.org",
         slug: "rails-wizard",
         text: "A fun and helpful Rails Resource",
-        resource_type: "rails"}
+        resource_type: "rails",
+        catalog_id: "name"}
        #should I change this so tests pass? pins_controller.rb 54 & pin.rb 2
     end
 
@@ -62,6 +63,7 @@ RSpec.describe PinsController do
       end
     end
 
+    # :create, params: {pin: @pin_hash} (and make the params change everywhere where applicable in that set of tests) per Lesley depending on version of rails and rspec - but this has tested out for me so FYI :)
     it 'responds with a redirect' do
       post :create, pin: @pin_hash
       expect(response.redirect?).to be(true)
@@ -103,7 +105,8 @@ RSpec.describe PinsController do
       url: "http://railswizard.org",
       slug: "rails-wizard",
       text: "A fun and helpful Rails Resource",
-      resource_type: "rails")
+      resource_type: "rails",
+      catalog_id: "name")
     end
 
     after(:each) do
@@ -138,13 +141,15 @@ RSpec.describe PinsController do
       url: "http://railswizard.org",
       slug: "rails-wizard",
       text: "A fun and helpful Rails Resource",
-      resource_type: "rails")
+      resource_type: "rails",
+      catalog_id: "name")
       @pin_hash = {
         title: "Rails Wizard",
         url: "http://railswizard.org",
         slug: "rails-wizard",
         text: "A fun and helpful Rails Resource",
-        resource_type: "rails"}
+        resource_type: "rails",
+        catalog_id: "name"}
        #should I change this so tests pass? pins_controller.rb 54 & pin.rb 2
     end
 
@@ -191,7 +196,7 @@ RSpec.describe PinsController do
         # delete the title from the @pin_hash in order
         # to test what happens with invalid parameters
         @pin_hash.delete(:title)
-        post :edit, id: @pin.id 
+        post :edit, id: @pin.id
         expect(response).to render_template(:edit)
       end
     end
