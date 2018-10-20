@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'aws-sdk-s3', '~> 1.0.0.rc2'
+gem 'aws-sdk', '< 2.0'
 gem 'paperclip'
 gem 'rails_12factor'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
