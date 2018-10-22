@@ -5,8 +5,11 @@ Rails.application.configure do
     :storage => :s3,
     :s3_credentials => {
       :bucket => "lisa-sk-pin-app",
-      :access_key_id => "AKIAIQTRDMBTZWIJYNEQ",
-      :secret_access_key => "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",
+      :access_key_id => ENV["ACCESS_KEY_ID"],
+      :secret_access_key => ENV["SECRET_ACCESS_KEY"],
+      #      :access_key_id => "",
+      #      :secret_access_key => "",
+
     },
     :s3_region => "us-east-1"
   }
