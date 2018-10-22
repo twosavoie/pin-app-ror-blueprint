@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
-
+ruby "2.4.4"
 gem 'aws-sdk-s3', '~> 1.0.0.rc2'
+# gem 'aws-sdk', '~> 2'
+# maybe gem 'aws-sdk', '~> 3' per aws readme docs
 gem 'aws-sdk', '< 2.0'
 gem 'paperclip'
 gem 'rails_12factor'
