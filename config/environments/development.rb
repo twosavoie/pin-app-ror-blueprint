@@ -4,11 +4,11 @@ Rails.application.configure do
   config.paperclip_defaults = {
     :storage => :s3,
     :s3_credentials => {
-      :bucket => "",
-      :access_key_id => "",
-      :secret_access_key => "",
+      :bucket => Rails.application.secrets.bucket,
+      :access_key_id => Rails.application.secrets.access_key_id,
+      :secret_access_key => Rails.application.secrets.secret_access_key,
     },
-    :s3_region => ""
+    :s3_region => Rails.application.secrets.s3_region
   }
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
