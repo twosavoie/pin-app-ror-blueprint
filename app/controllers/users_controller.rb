@@ -10,11 +10,33 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @user = User.find(params[:id])
+  end
+
+  def show_by_email
+    @user = User.find_by_email(params[:email])
+    render :show #show.html ?
   end
 
   # GET /users/new
   def new
     @user = User.new
+  end
+
+  # GET /users/login
+  def login
+    # should this be the show_by_email?
+  end
+
+  def authenticate
+    @user = User.authenticate(params[:email], params[:password])
+    if @user.nil?
+      @errors = "Invalid email or password. Please re-enter."
+      render :login
+    else
+      session[:user_id] = @user.id
+      redirect_to "/users/#{@user.id}"
+    end
   end
 
   # GET /users/1/edit
