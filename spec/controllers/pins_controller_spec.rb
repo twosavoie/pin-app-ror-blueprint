@@ -52,7 +52,7 @@ RSpec.describe PinsController do
         slug: "rails-wizard",
         text: "A fun and helpful Rails Resource",
         resource_type: "rails",
-        catalog_id: "name"}
+        catalog_id: "name"} # rails
        #should I change this so tests pass? pins_controller.rb 54 & pin.rb 2
     end
 
