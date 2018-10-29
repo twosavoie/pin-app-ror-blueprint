@@ -18,4 +18,6 @@ describe User do
     post :authenticate, @valid_user_hash
     expect(User.find_by_email_and_password("coder@skillcrush.com", "password").present?).to be (true)
   end
+
+  it { should validate_presence_of(:first_name) }
 end
