@@ -51,8 +51,7 @@ RSpec.describe PinsController do
         url: "http://railswizard.org",
         slug: "rails-wizard",
         text: "A fun and helpful Rails Resource",
-        resource_type: "rails",
-        catalog_id: "name"} # rails
+        category: rails} # rails
        #should I change this so tests pass? pins_controller.rb 54 & pin.rb 2
     end
 
@@ -65,17 +64,17 @@ RSpec.describe PinsController do
 
     # :create, params: {pin: @pin_hash} (and make the params change everywhere where applicable in that set of tests) per Lesley depending on version of rails and rspec - but this has tested out for me so FYI :)
     it 'responds with a redirect' do
-      post :create, pin: @pin_hash
+      post :create, params: {pin: @pin_hash}
       expect(response.redirect?).to be(true)
     end
 
     it 'creates a pin' do
-      post :create, pin: @pin_hash
+      post :create, params: {pin: @pin_hash}
       expect(Pin.find_by_slug("rails-wizard").present?).to be(true)
     end
 
     it 'redirects to the show view' do
-      post :create, pin: @pin_hash
+      post :create, params: {pin: @pin_hash}
       expect(response).to redirect_to(pin_url(assigns(:pin)))
     end
 
@@ -84,7 +83,7 @@ RSpec.describe PinsController do
       # delete the title from the @pin_hash in order
       # to test what happens with invalid parameters
       @pin_hash.delete(:title)
-      post :create, pin: @pin_hash
+      post :create, params: {pin: @pin_hash}
       expect(response).to render_template(:new)
     end
 
@@ -93,7 +92,7 @@ RSpec.describe PinsController do
       # delete the title from the @pin_hash in order
       # to test what happens with invalid parameters
       @pin_hash.delete(:title)
-      post :create, pin: @pin_hash
+      post :create, params: {pin: @pin_hash}
       expect(assigns[:errors].present?).to be(true)
     end
 
@@ -105,8 +104,7 @@ RSpec.describe PinsController do
       url: "http://railswizard.org",
       slug: "rails-wizard",
       text: "A fun and helpful Rails Resource",
-      resource_type: "rails",
-      catalog_id: "name")
+      category: rails)
     end
 
     after(:each) do
@@ -117,18 +115,18 @@ RSpec.describe PinsController do
     end
 
     it 'responds with success' do
-      get :edit, id: @pin.id
+      get :edit, params: {id: @pin.id}
       expect(response.success?).to be(true)
     end
 
     it 'renders the edit template' do
-      get :edit, id: @pin.id
+      get :edit, params: {id: @pin.id}
       expect(response).to render_template(:edit)
     end
 
     # assigns an instance variable called @pin to the Pin with the appropriate id
     it 'assigns an instance variable to a new pin' do
-      get :edit, id: @pin.id
+      get :edit, params: {id: @pin.id}
       expect(assigns(:pin)).to eq(@pin)
     end
   end
@@ -141,15 +139,13 @@ RSpec.describe PinsController do
       url: "http://railswizard.org",
       slug: "rails-wizard",
       text: "A fun and helpful Rails Resource",
-      resource_type: "rails",
-      catalog_id: "name")
+      category: rails)
       @pin_hash = {
         title: "Rails Wizard",
         url: "http://railswizard.org",
         slug: "rails-wizard",
         text: "A fun and helpful Rails Resource",
-        resource_type: "rails",
-        catalog_id: "name"}
+        category: rails}
        #should I change this so tests pass? pins_controller.rb 54 & pin.rb 2
     end
 
@@ -159,22 +155,22 @@ RSpec.describe PinsController do
         pin.destroy
       end
     end
-
+# The next three: spec.rb:162: warning: key :params is duplicated and overwritten on line 162, 168, 173
     # make a POST request to /pins with valid parameters
       # responds with success
       it 'responds with success' do
-        patch :update, id: @pin.id, pin: @pin_hash
+        patch :update, params: {id: @pin.id}, params: {pin: @pin_hash}
         expect(response).to redirect_to("/pins/#{@pin.id}")
       end
 
       it 'updates a pin' do
         new_title = "Skillcrush"
-        put :update, id: @pin.id, pin: @pin_hash
+        put :update, params: {id: @pin.id}, params: {pin: @pin_hash}
         expect(@pin.reload.title).not_to eq(new_title)
       end
 
       it 'redirects to the show view' do
-        put :update, id: @pin.id, pin: @pin_hash
+        put :update, params: {id: @pin.id}, params: {pin: @pin_hash}
         expect(response).to redirect_to(pin_url(assigns(:pin)))
       end
 
@@ -186,7 +182,7 @@ RSpec.describe PinsController do
               # delete the title from the @pin_hash in order
               # to test what happens with invalid parameters
         @pin_hash.delete(:title)
-        post :create, pin: @pin_hash
+        post :create, params: {pin: @pin_hash}
         expect(assigns[:errors].present?).to be(true)
       end
 
@@ -196,7 +192,7 @@ RSpec.describe PinsController do
         # delete the title from the @pin_hash in order
         # to test what happens with invalid parameters
         @pin_hash.delete(:title)
-        post :edit, id: @pin.id
+        post :edit, params: {id: @pin.id}
         expect(response).to render_template(:edit)
       end
     end

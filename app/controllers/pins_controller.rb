@@ -51,6 +51,6 @@ end
   private
 
   def pin_params
-    params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image)  # :resource_type) #:resource_type makes test pass but doesn't work (????) # :category_id, the app works but will not test.
+    params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image)  # :resource_type) #:resource_type makes test pass but doesn't work (????) # :category_id, the app works but will not test. 
   end
 end
