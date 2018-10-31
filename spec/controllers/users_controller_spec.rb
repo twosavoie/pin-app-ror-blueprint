@@ -18,51 +18,94 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe UsersController do
+RSpec.describe UsersController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
   # User. As you add validations to User, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "first_name" => "MyString" } }
+
+  before(:each) do
+    @user = FactoryGirl.build(:user)
+  end
+  after(:each) do
+#   if !@user.destroyed? AnnAllan
+    @user.destroy
+#  end
+  end
+
+  let(:valid_attributes) {
+    {
+      first_name: @user.first_name,
+      last_name: @user.last_name,
+      email: @user.email,
+      password: @user.password
+    }
+  }
+
+  let(:invalid_attributes) {
+    {
+      first_name: @user.first_name,
+      last_name: @user.last_name,
+#      email: @user.email,
+#      password: @user.password
+    }
+  } #AnnAllan has first_name: @user.first_name,last_name: @user.last_name, mlbage has first_name: @user.first_name,last_name: nil,password: @user.password,email: ""
+
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # UsersController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET index" do
-    it "assigns all users as @users" do
-      user = User.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:users).should eq([user])
-    end
-  end
+# Instead of an index of users, App has individual user pages
+#  describe "GET index" do
+#    it "assigns all users as @users" do
+#      user = User.create! valid_attributes
+#      get :index, {}, valid_session
+#      assigns(:users).should eq([user])
+#    end
+#  end
 
   describe "GET show" do
     it "assigns the requested user as @user" do
       user = User.create! valid_attributes
+      post :authenticate, {email: @user.email, password: @user.password}
       get :show, {:id => user.to_param}, valid_session
-      assigns(:user).should eq(user)
+      expect(assigns(:user)).to eq(user)
     end
+
+#    it "redirects to login if user is not signed in" do
+#      user = User.create! valid_attributes
+#      get :show, {:id => user.to_param}, valid_session
+#      expect(response).to redirect_to(:login)
+#    end
   end
 
   describe "GET new" do
     it "assigns a new user as @user" do
       get :new, {}, valid_session
-      assigns(:user).should be_a_new(User)
+      expect(assigns(:user)).to be_a_new(User)
     end
   end
 
   describe "GET edit" do
     it "assigns the requested user as @user" do
       user = User.create! valid_attributes
+      post :authenticate, {email: @user.email, password: @user.password}
       get :edit, {:id => user.to_param}, valid_session
-      assigns(:user).should eq(user)
+      expect(assigns(:user)).to eq(user)
     end
+
+#    it "redirects to login if user is not signed in" do
+#      user = User.create! valid_attributes
+#      get :edit, {:id => user.to_param}, valid_session
+#      expect(response).to redirect_to(:login)
+#    end
   end
 
   describe "POST create" do
-    describe "with valid params" do
+    context "with valid params" do
+#    describe "with valid params" do
       it "creates a new User" do
         expect {
           post :create, {:user => valid_attributes}, valid_session
@@ -71,73 +114,86 @@ describe UsersController do
 
       it "assigns a newly created user as @user" do
         post :create, {:user => valid_attributes}, valid_session
-        assigns(:user).should be_a(User)
-        assigns(:user).should be_persisted
+        expect(assigns(:user)).to be_a(User)
+        expect(assigns(:user)).to be_persisted
       end
 
       it "redirects to the created user" do
         post :create, {:user => valid_attributes}, valid_session
-        response.should redirect_to(User.last)
+        expect(response).to redirect_to(User.last)
       end
     end
 
-    describe "with invalid params" do
+    context "with invalid params" do # not describe
       it "assigns a newly created but unsaved user as @user" do
         # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, {:user => { "first_name" => "invalid value" }}, valid_session
-        assigns(:user).should be_a_new(User)
+#        User.any_instance.stub(:save).and_return(false)
+        post :create, {:user => invalid_attributes}, valid_session
+        expect(assigns(:user)).to be_a_new(User)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, {:user => { "first_name" => "invalid value" }}, valid_session
-        response.should render_template("new")
+#        User.any_instance.stub(:save).and_return(false)
+        post :create, {:user => invalid_attributes}, valid_session
+        expect(response).to render_template("new")
       end
     end
   end
 
   describe "PUT update" do
-    describe "with valid params" do
+    context "with valid params" do # not describe
       it "updates the requested user" do
         user = User.create! valid_attributes
         # Assuming there are no other users in the database, this
         # specifies that the User created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        User.any_instance.should_receive(:update).with({ "first_name" => "MyString" })
-        put :update, {:id => user.to_param, :user => { "first_name" => "MyString" }}, valid_session
+#        User.any_instance.should_receive(:update).with({ "first_name" => "MyString" })
+        post :authenticate, {email: @user.email, password: @user.password}
+        put :update, {:id => user.to_param, :user => valid_attributes}, valid_session
+        user.reload
+        expect(assigns(:user)).to eq(user)
       end
 
       it "assigns the requested user as @user" do
         user = User.create! valid_attributes
+        post :authenticate, {email: @user.email, password: @user.password}
         put :update, {:id => user.to_param, :user => valid_attributes}, valid_session
-        assigns(:user).should eq(user)
+        expect(assigns(:user)).to eq(user)
       end
 
       it "redirects to the user" do
         user = User.create! valid_attributes
+        post :authenticate, {email: @user.email, password: @user.password}
         put :update, {:id => user.to_param, :user => valid_attributes}, valid_session
-        response.should redirect_to(user)
+        expect(response).to redirect_to(user)
       end
+
+#      it "redirects to login if user is not signed in" do
+#        user = User.create! valid_attributes
+#        put :update, {:id => user.to_param}, valid_session
+#        expect(response).to redirect_to(:login)
+#      end
     end
 
-    describe "with invalid params" do
+    context "with invalid params" do # not describe
       it "assigns the user as @user" do
         user = User.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        put :update, {:id => user.to_param, :user => { "first_name" => "invalid value" }}, valid_session
-        assigns(:user).should eq(user)
+#        User.any_instance.stub(:save).and_return(false)
+        post :authenticate, {email: @user.email, password: @user.password}
+        put :update, {:id => user.to_param, :user => invalid_attributes}, valid_session
+        expect(assigns(:user)).to eq(user)
       end
 
       it "re-renders the 'edit' template" do
         user = User.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        put :update, {:id => user.to_param, :user => { "first_name" => "invalid value" }}, valid_session
-        response.should render_template("edit")
+#        User.any_instance.stub(:save).and_return(false)
+        post :authenticate, {email: @user.email, password: @user.password}
+        put :update, {:id => user.to_param, :user => invalid_attributes}, valid_session
+        expect(response).to render_template("edit")
       end
     end
   end
@@ -145,6 +201,7 @@ describe UsersController do
   describe "DELETE destroy" do
     it "destroys the requested user" do
       user = User.create! valid_attributes
+      post :authenticate, {email: @user.email, password: @user.password}
       expect {
         delete :destroy, {:id => user.to_param}, valid_session
       }.to change(User, :count).by(-1)
@@ -152,9 +209,16 @@ describe UsersController do
 
     it "redirects to the users list" do
       user = User.create! valid_attributes
+      post :authenticate, {email: @user.email, password: @user.password}
       delete :destroy, {:id => user.to_param}, valid_session
-      response.should redirect_to(users_url)
+      expect(response).to redirect_to(users_url)
     end
+
+#    it "redirects to login if user is not signed in" do
+#      user = User.create! valid_attributes
+#      delete :destroy, {:id => user.to_param}, valid_session
+#      expect(response).to redirect_to(:login)
+#    end
   end
 
   describe "GET login" do
@@ -165,36 +229,44 @@ describe UsersController do
   end
 
   describe "POST login" do
-    before(:all) do
-      @user = User.create(email: "coder@skillcrush.com", password: "secret")
-      @valid_user_hash = {email: @user.email, password: @user.password}
-      @invalid_user_hash = {email: "", password: ""}
-    end
+#    before(:all) do
+#      @user = User.create(email: "coder@skillcrush.com", password: "secret")
+#      @valid_user_hash = {email: @user.email, password: @user.password}
+#      @invalid_user_hash = {email: "", password: ""}
+#    end
 
-    after(:all) do
-      if !@user.destroyed?
-        @user.destroy
-      end
-    end
+#    after(:all) do
+#      if !@user.destroyed?
+#        @user.destroy
+#      end
+#    end
+
 
     it "renders the show view if params valid" do
-      post :authenticate, @valid_user_hash
-      expect(response).to render_template("show")
+      user = User.create! valid_attributes
+      post :authenticate, {email: @user.email, password: @user.password}
+      expect(response).to redirect_to(user_path(user.id))
     end
 
     it "populates @user if params valid" do
-      post :authenticate, @valid_user_hash
-      expect(User.find_by_email_and_password("coder@skillcrush.com", "secret").present?).to be (true)
+#      post :authenticate, @valid_user_hash
+      user = User.create! valid_attributes
+      post :authenticate, {email: @user.email, password: @user.password}
+#      post :authenticate, @valid_user_hash
+      expect(assigns(:user)).to eq(user)
+#      expect(user.present?).to be(true)
     end
 
     it "renders the login view if params invalid" do
-      post :authenticate, @invalid_user_has
-      expect(response).to render_template(:login)
+      user = User.create! valid_attributes
+      post :authenticate, invalid_attributes
+      expect(response).to render_template("login") # why not :login?
     end
 
     it "populates the @errors variable if params invalid" do
-      post :authenticate, @invalid_user_hash
+      user = User.create! valid_attributes
+      post :authenticate, invalid_attributes
       expect(assigns[:errors].present?).to be(true)
     end
-end
+  end
 end

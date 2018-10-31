@@ -55,4 +55,5 @@ group :test do
   gem 'spring'
   gem 'database_cleaner'
   gem 'shoulda-matchers', '~> 2.8'
+  gem 'factory_girl_rails', '~> 4.5'
 end
