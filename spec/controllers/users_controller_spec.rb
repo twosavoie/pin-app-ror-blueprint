@@ -74,11 +74,11 @@ RSpec.describe UsersController, type: :controller do
       expect(assigns(:user)).to eq(user)
     end
 
-#    it "redirects to login if user is not signed in" do
-#      user = User.create! valid_attributes
-#      get :show, {:id => user.to_param}, valid_session
-#      expect(response).to redirect_to(:login)
-#    end
+    it "redirects to login if user is not signed in" do
+      user = User.create! valid_attributes
+      get :show, {:id => user.to_param}, valid_session
+      expect(response).to redirect_to(:login)
+    end
   end
 
   describe "GET new" do
@@ -96,11 +96,11 @@ RSpec.describe UsersController, type: :controller do
       expect(assigns(:user)).to eq(user)
     end
 
-#    it "redirects to login if user is not signed in" do
-#      user = User.create! valid_attributes
-#      get :edit, {:id => user.to_param}, valid_session
-#      expect(response).to redirect_to(:login)
-#    end
+    it "redirects to login if user is not signed in" do
+      user = User.create! valid_attributes
+      get :edit, {:id => user.to_param}, valid_session
+      expect(response).to redirect_to(:login)
+    end
   end
 
   describe "POST create" do
@@ -170,11 +170,11 @@ RSpec.describe UsersController, type: :controller do
         expect(response).to redirect_to(user)
       end
 
-#      it "redirects to login if user is not signed in" do
-#        user = User.create! valid_attributes
-#        put :update, {:id => user.to_param}, valid_session
-#        expect(response).to redirect_to(:login)
-#      end
+      it "redirects to login if user is not signed in" do
+        user = User.create! valid_attributes
+        put :update, {:id => user.to_param}, valid_session
+        expect(response).to redirect_to(:login)
+      end
     end
 
     context "with invalid params" do # not describe
@@ -214,11 +214,11 @@ RSpec.describe UsersController, type: :controller do
       expect(response).to redirect_to(users_url)
     end
 
-#    it "redirects to login if user is not signed in" do
-#      user = User.create! valid_attributes
-#      delete :destroy, {:id => user.to_param}, valid_session
-#      expect(response).to redirect_to(:login)
-#    end
+    it "redirects to login if user is not signed in" do
+      user = User.create! valid_attributes
+      delete :destroy, {:id => user.to_param}, valid_session
+      expect(response).to redirect_to(:login)
+    end
   end
 
   describe "GET login" do

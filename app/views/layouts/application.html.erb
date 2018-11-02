@@ -9,7 +9,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="container">
+  <div class="container pull-right">
+    <h3>
+      <%= "Hi #{current_user.first_name}!" %> |
+      <%= link_to "Logout", logout_path(current_user), method: :delete %>
+    </h3>
     <%= yield %>
   </div>
 </body>

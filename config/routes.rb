@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   #   get 'products/:id' => 'catalog#view'
   get 'pins/:id' => 'pin#show'
 
+  delete 'logout/:id' => "users#logout", as: :logout
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
