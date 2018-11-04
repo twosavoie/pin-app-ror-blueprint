@@ -43,7 +43,7 @@ class UsersController < ApplicationController
 
   def logout
     session.delete(:user_id)
-#    redirect_to login_path
+    redirect_to login_path
   end
 
   # GET /users/1/edit
@@ -94,12 +94,6 @@ class UsersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
-    end
-
-    def require_login
-      if current_user.nil?
-        redirect_to(:login)
-      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

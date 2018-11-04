@@ -1,8 +1,9 @@
 class PinsController < ApplicationController
-  
+  before_action :require_login, except: [:index, :show, :show_by_name]
 
   def index
     @pins = Pin.all
+#    @pins = Pin.current_user
   end
 
   def show
@@ -52,6 +53,6 @@ end
   private
 
   def pin_params
-    params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image)  # :resource_type) #:resource_type makes test pass but doesn't work (????) # :category_id, the app works but will not test.
+    params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image, :user_id)  # :resource_type) #:resource_type makes test pass but doesn't work (????) # :category_id, the app works but will not test.
   end
 end
