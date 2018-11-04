@@ -3,7 +3,7 @@ class PinsController < ApplicationController
 
   def index
     @pins = Pin.all
-#    @pins = Pin.current_user
+#    @pins = Pin.current_user.id
   end
 
   def show

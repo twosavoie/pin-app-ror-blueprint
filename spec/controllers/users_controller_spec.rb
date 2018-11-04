@@ -83,7 +83,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe "GET new" do
     it "assigns a new user as @user" do
-      get :new, {}, valid_session
+      get :new, {}, valid_session #AnnAllan different
       expect(assigns(:user)).to be_a_new(User)
     end
   end
@@ -101,6 +101,7 @@ RSpec.describe UsersController, type: :controller do
       get :edit, {:id => user.to_param}, valid_session
       expect(response).to redirect_to(:login)
     end
+    #AnnAllen describe "GET login" do
   end
 
   describe "POST create" do

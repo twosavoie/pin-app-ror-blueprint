@@ -1,6 +1,17 @@
 require 'spec_helper'
 RSpec.describe PinsController do
 
+  before(:each) do
+    @user = FactoryGirl.create(:user)
+    login(@user)
+  end
+
+  after(:each) do
+    if !@user.destroyed?
+      @user.destroy
+    end
+  end
+
   #here I will describe what I expect the GET index controller action to do
   describe "GET index" do
 
@@ -25,6 +36,12 @@ RSpec.describe PinsController do
 
     end
 
+    it 'redirects to Login when logged out' do
+      logout(@user)
+      get :index
+      expect(response).to redirect_to(:login)
+    end
+
   end
 
   describe "GET new" do
@@ -42,6 +59,13 @@ RSpec.describe PinsController do
       get :new
       expect(assigns(:pin)).to be_a_new(Pin)
     end
+
+    it 'redirects to Login when logged out' do
+      logout(@user)
+      get :index
+      expect(response).to redirect_to(:login)
+    end
+
   end
 
   describe "POST create" do
@@ -96,6 +120,12 @@ RSpec.describe PinsController do
       expect(assigns[:errors].present?).to be(true)
     end
 
+    it 'redirects to Login when logged out' do
+      logout(@user)
+      get :index
+      expect(response).to redirect_to(:login)
+    end
+
   end
 
   describe "GET edit" do  # get to pins/id/redirect_to
@@ -129,6 +159,13 @@ RSpec.describe PinsController do
       get :edit, id: @pin.id
       expect(assigns(:pin)).to eq(@pin)
     end
+
+    it 'redirects to Login when logged out' do
+      logout(@user)
+      get :index
+      expect(response).to redirect_to(:login)
+    end
+
   end
 
 #!!!
@@ -195,5 +232,12 @@ RSpec.describe PinsController do
         post :edit, id: @pin.id
         expect(response).to render_template(:edit)
       end
+
+      it 'redirects to Login when logged out' do
+        logout(@user)
+        get :index
+        expect(response).to redirect_to(:login)
+      end
+      
     end
   end
